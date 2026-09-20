@@ -152,7 +152,7 @@ public class Main {
             String isbn = scanner.nextLine();
             double precio = leerDouble("Ingrese precio: S/ " );
 
-            int stock = leerEntero("Ingrese stock: ");
+            int stock = leerStock("Ingrese stock: ");
             Libro libro = new Libro( titulo, autor, isbn, precio, stock);
             String error = validarLibro(libro);
             if (error != null) {
@@ -240,6 +240,27 @@ public class Main {
         }
     }
 
+    public static int leerStock(String mensaje) {
+        while (true) {
+            try {
+                System.out.print(mensaje);
+                String entrada = scanner.nextLine();
+                if (entrada.trim().equals("-0")) {
+                    System.out.println("El stock no puede ser -0.");
+                    continue;
+                }
+                int stock = Integer.parseInt(entrada);
+                if (stock < 0) {
+                    System.out.println("El stock no puede ser negativo.");
+                    continue;
+                }
+                return stock;
+            } catch (NumberFormatException e) {
+                System.out.println("Debes ingresar un número entero.");
+            }
+        }
+    }
+
     public static String validarCliente(Cliente cliente) {
         if (cliente == null) {
             return "El cliente no puede ser nulo.";
@@ -311,7 +332,7 @@ public class Main {
         }
 
         if (libro.getStock() < 0) {
-            return "el stock no puede ser negativo.";
+            return "El stock no puede ser negativo.";
         }
 
         return null;
@@ -338,9 +359,7 @@ public class Main {
             return "No se encontró el libro.";
         }
         if (libro.getStock() <= 0) {
-            return "Aviso: no hay stock disponible del libro \""
-                    + libro.getTitulo()
-                    + "\". No se puede realizar la reserva.";
+            return "No hay stock disponible del libro";
         }
         return null;
     }
